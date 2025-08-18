@@ -1,4 +1,4 @@
-public class Duke {
+public class Chatowo {
     public static void main(String[] args) {
         String divider = "\n_____________";
 
