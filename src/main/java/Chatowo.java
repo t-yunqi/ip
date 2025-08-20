@@ -1,9 +1,9 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Chatowo {
     // initialise task list
-    private static Task[] list = new Task[100];
-    private static int count = 0;
+    private static ArrayList<Task> list = new ArrayList<>();
 
     public static void reply(String msg) {
         String divider = "\n~*~*~*~*~*~*~*~*~*~*~*~*~*~";
@@ -11,10 +11,9 @@ public class Chatowo {
     }
 
     public static void replyAddTask(Task task) {
-        list[count] = task;
-        count++;
-        Chatowo.reply("    Added " + list[count - 1] + " to task list! UwU\n" +
-                "    You have " + count + " tasks now!!");
+        list.add(task);
+        Chatowo.reply("    Added " + task + " to task list! UwU\n" +
+                "    You have " + list.size() + " tasks now!!");
     }
 
     public static void main(String[] args) {
@@ -30,30 +29,47 @@ public class Chatowo {
         while (!input.equals("bye")) {
             if (input.equals("list")) {
                 String listtext = "    Here are your tasks! >w<";
-                for (int i = 0; i < count; i++) {
+                for (int i = 0; i < list.size(); i++) {
                     String index = String.valueOf(i + 1);
-                    listtext += ("\n    " + index + "." + list[i].toString());
+                    listtext += ("\n    " + index + "." + list.get(i).toString());
                 }
                 Chatowo.reply(listtext);
             } else {
                 String[] words = input.split(" ");
 
                 switch(words[0]) {
-                    case "mark": {
-                        int index = Integer.parseInt(words[1]) - 1;
-                        list[index].setDone();
-                        Chatowo.reply("    Okie! This task is done! ^w^\n      "
-                                + list[index].toString());
+                    case "mark":
+                        if (words.length <= 1) {
+                            Chatowo.reply("    Oopsies... Pwease specify a task number... >w<");
+                        } else {
+                            int index = Integer.parseInt(words[1]) - 1;
+                            list.get(index).setDone();
+                            Chatowo.reply("    Okie! This task is done! ^w^\n      "
+                                    + list.get(index).toString());
+                        }
                         break;
-                    }
 
-                    case "unmark": {
-                        int index = Integer.parseInt(words[1]) - 1;
-                        list[index].setNotDone();
-                        Chatowo.reply("    Oh... This task is not done yet... OwO\n      "
-                                + list[index].toString());
+                    case "unmark":
+                        if (words.length <= 1) {
+                            Chatowo.reply("    Oopsies... Pwease specify a task number... >w<");
+                        } else {
+                            int index = Integer.parseInt(words[1]) - 1;
+                            list.get(index).setNotDone();
+                            Chatowo.reply("    Oh... This task is not done yet... OwO\n      "
+                                    + list.get(index).toString());
+                        }
                         break;
-                    }
+
+                    case "delete":
+                        if (words.length <= 1) {
+                            Chatowo.reply("    Oopsies... Pwease specify a task number... >w<");
+                        } else {
+                            int index = Integer.parseInt(words[1]) - 1;
+                            Task t = list.remove(index);
+                            list.trimToSize();
+                            Chatowo.reply("    Okie! This task has been deleted! ^w^\n    " + t);
+                        }
+                        break;
 
                     case "todo":
                         if (words.length <= 1) {
