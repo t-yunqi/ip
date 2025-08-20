@@ -56,25 +56,41 @@ public class Chatowo {
                     }
 
                     case "todo":
-                        Chatowo.replyAddTask(new ToDo(input.substring(5)));
+                        if (words.length <= 1) {
+                            Chatowo.reply("    Oopsies... Add a name for your todo task pwease... >w<");
+                        } else {
+                            Chatowo.replyAddTask(new ToDo(input.substring(5)));
+                        }
                         break;
 
                     case "deadline":
                         int deadlineindex = input.lastIndexOf(" /by ");
-                        Chatowo.replyAddTask(new Deadline(input.substring(9, deadlineindex),
-                                input.substring(deadlineindex + 5)));
+                        if (words.length <= 1) {
+                            Chatowo.reply("    Oopsies... Add a name for your deadline task pwease... >w<");
+                        } else if (deadlineindex == -1) {
+                            Chatowo.reply("    Oopsies... Add a /by for your deadline task pwease... >w<");
+                        } else {
+                            Chatowo.replyAddTask(new Deadline(input.substring(9, deadlineindex),
+                                    input.substring(deadlineindex + 5)));
+                        }
                         break;
 
                     case "event":
                         int fromindex = input.lastIndexOf(" /from ");
                         int toindex = input.lastIndexOf(" /to ");
-                        Chatowo.replyAddTask(new Event(input.substring(6, fromindex),
-                                input.substring(fromindex + 7, toindex),
-                                input.substring(toindex + 5)));
+                        if (words.length <= 1) {
+                            Chatowo.reply("    Oopsies... Add a name for your event task pwease... >w<");
+                        } else if (fromindex == -1 || toindex == -1) {
+                            Chatowo.reply("    Oopsies... Add a /to and /from for your event task pwease... >w<");
+                        } else {
+                            Chatowo.replyAddTask(new Event(input.substring(6, fromindex),
+                                    input.substring(fromindex + 7, toindex),
+                                    input.substring(toindex + 5)));
+                        }
                         break;
 
                     default:
-                        Chatowo.replyAddTask(new Task(input));
+                        Chatowo.reply("    Oh nyo... I don't know... what you're saying... ;w;");
                 }
             }
 
