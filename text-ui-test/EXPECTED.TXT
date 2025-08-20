@@ -1,7 +1,23 @@
-Hello from
- ____        _        
-|  _ \ _   _| | _____ 
-| | | | | | | |/ / _ \
-| |_| | |_| |   <  __/
-|____/ \__,_|_|\_\___|
-
+    Hewwo! I'm Chatowo. :3
+    What can I do for you? OwO
+~*~*~*~*~*~*~*~*~*~*~*~*~*~
+    Added [T][ ] borrow book to task list! UwU
+    You have 1 tasks now!!
+~*~*~*~*~*~*~*~*~*~*~*~*~*~
+    Here are your tasks! >w<
+    1.[T][ ] borrow book
+~*~*~*~*~*~*~*~*~*~*~*~*~*~
+    Okie! This task is done! ^w^
+      [T][X] borrow book
+~*~*~*~*~*~*~*~*~*~*~*~*~*~
+    Oh... This task is not done yet... OwO
+      [T][ ] borrow book
+~*~*~*~*~*~*~*~*~*~*~*~*~*~
+    Added [D][ ] return book (by: Sunday) to task list! UwU
+    You have 2 tasks now!!
+~*~*~*~*~*~*~*~*~*~*~*~*~*~
+    Added [E][ ] meeting (from: Friday to: Saturday) to task list! UwU
+    You have 3 tasks now!!
+~*~*~*~*~*~*~*~*~*~*~*~*~*~
+    Byebye -w-
+~*~*~*~*~*~*~*~*~*~*~*~*~*~
