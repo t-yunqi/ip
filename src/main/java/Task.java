@@ -14,6 +14,14 @@ public class Task {
         this.done = false;
     }
 
+    public String toDataString() {
+        if (this.done) {
+            return " | 1 | " + name;
+        } else {
+            return " | 0 | " + name;
+        }
+    }
+
     @Override
     public String toString() {
         if (this.done) {

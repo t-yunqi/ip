@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -14,6 +20,16 @@ public class Chatowo {
         list.add(task);
         Chatowo.reply("    Added " + task + " to task list! UwU\n" +
                 "    You have " + list.size() + " tasks now!!");
+
+        BufferedWriter bw;
+        try {
+            bw = new BufferedWriter(new FileWriter("./data/chatowo.txt", true));
+            bw.newLine();
+            bw.write(task.toDataString());
+            bw.close();
+        } catch (Exception e) {
+            Chatowo.reply(e.getMessage());
+        }
     }
 
     public static void mark(String[] words) throws ChatowoException {
@@ -44,6 +60,7 @@ public class Chatowo {
         } else {
             int index = Integer.parseInt(words[1]) - 1;
             Task t = list.remove(index);
+            Chatowo.removeFromTaskList(index);
             list.trimToSize();
             Chatowo.reply("    Okie! This task has been deleted! ^w^\n    " + t);
         }
@@ -84,10 +101,105 @@ public class Chatowo {
         }
     }
 
+    public static void readTaskList() {
+        BufferedReader br = null;
+        try {
+            new File("./data/chatowo.txt").createNewFile();
+            br = new BufferedReader(new FileReader("./data/chatowo.txt"));
+            String line = br.readLine();
+            while (line != null) {
+                String[] taskDetails = line.split(" \\| ");
+                if (taskDetails.length < 3) {
+                    throw new IOException("invalid data format");
+                }
+                switch (taskDetails[0]) {
+                    case "T":
+                        ToDo t = new ToDo(taskDetails[2]);
+                        list.add(t);
+                        if (taskDetails[1].equals("1")) {
+                            t.setDone();
+                        }
+                        break;
+
+                    case "D":
+                        if (taskDetails.length < 4) {
+                            throw new IOException("invalid data format");
+                        }
+                        Deadline d = new Deadline(taskDetails[2], taskDetails[3]);
+                        list.add(d);
+                        if (taskDetails[1].equals("1")) {
+                            d.setDone();
+                        }
+                        break;
+
+                    case "E":
+                        if (taskDetails.length < 5) {
+                            throw new IOException("invalid data format");
+                        }
+                        Event e = new Event(taskDetails[2], taskDetails[3], taskDetails[4]);
+                        list.add(e);
+                        if (taskDetails[1].equals("1")) {
+                            e.setDone();
+                        }
+                        break;
+
+                }
+                line = br.readLine();
+            }
+            br.close();
+        } catch (Exception e) {
+            Chatowo.reply(e.getMessage());
+        }
+
+    }
+
+    public static void removeFromTaskList(int index) {
+        File originalFile = new File("./data/chatowo.txt");
+        File tempFile = new File("./data/chatowo.txt.tmp");
+        BufferedReader br = null;
+        BufferedWriter bw = null;
+
+        try {
+            tempFile.createNewFile();
+            br = new BufferedReader(new FileReader(originalFile));
+            bw = new BufferedWriter(new FileWriter(tempFile));
+            String currentLine;
+            int lineCount = 0;
+
+            currentLine = br.readLine();
+            while (currentLine != null) {
+                lineCount++;
+                if (lineCount != index) {
+                    bw.write(currentLine + "\n");
+                }
+                currentLine = br.readLine();
+            }
+
+            br.close();
+            bw.close();
+
+            // Delete the original file
+            if (!originalFile.delete()) {
+                throw new IOException("Could not delete original file");
+            }
+
+            // Rename the temporary file to the original file's name
+            if (!tempFile.renameTo(originalFile)) {
+                throw new IOException("Could not rename temporary file");
+            }
+
+        } catch (Exception e) {
+            Chatowo.reply(e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         // output greeting
         String greeting = "    Hewwo! I'm Chatowo. :3\n    What can I do for you? OwO";
         Chatowo.reply(greeting);
+
+        // read data file
+        Chatowo.readTaskList();
 
         // initialise scanner for input
         Scanner scanner = new Scanner(System.in);
@@ -107,32 +219,32 @@ public class Chatowo {
 
                 try {
                     switch (words[0]) {
-                        case "mark":
-                            Chatowo.mark(words);
-                            break;
+                    case "mark":
+                        Chatowo.mark(words);
+                        break;
 
-                        case "unmark":
-                            Chatowo.unmark(words);
-                            break;
+                    case "unmark":
+                        Chatowo.unmark(words);
+                        break;
 
-                        case "delete":
-                            Chatowo.delete(words);
-                            break;
+                    case "delete":
+                        Chatowo.delete(words);
+                        break;
 
-                        case "todo":
-                            Chatowo.addTodoTask(words, input);
-                            break;
+                    case "todo":
+                        Chatowo.addTodoTask(words, input);
+                        break;
 
-                        case "deadline":
-                            Chatowo.addDeadlineTask(words, input);
-                            break;
+                    case "deadline":
+                        Chatowo.addDeadlineTask(words, input);
+                        break;
 
-                        case "event":
-                            Chatowo.addEventTask(words, input);
-                            break;
+                    case "event":
+                        Chatowo.addEventTask(words, input);
+                        break;
 
-                        default:
-                            throw new ChatowoException("    Oh nyo... I don't know... what you're saying... ;w;");
+                    default:
+                        throw new ChatowoException("    Oh nyo... I don't know... what you're saying... ;w;");
                     }
                 } catch (ChatowoException e) {
                     Chatowo.reply(e.getMessage());
