@@ -24,8 +24,8 @@ public class Chatowo {
         BufferedWriter bw;
         try {
             bw = new BufferedWriter(new FileWriter("./data/chatowo.txt", true));
-            bw.newLine();
             bw.write(task.toDataString());
+            bw.newLine();
             bw.close();
         } catch (Exception e) {
             Chatowo.reply(e.getMessage());
@@ -38,6 +38,7 @@ public class Chatowo {
         } else {
             int index = Integer.parseInt(words[1]) - 1;
             list.get(index).setDone();
+            Chatowo.editTaskList(index, list.get(index));
             Chatowo.reply("    Okie! This task is done! ^w^\n      "
                     + list.get(index).toString());
         }
@@ -49,6 +50,7 @@ public class Chatowo {
         } else {
             int index = Integer.parseInt(words[1]) - 1;
             list.get(index).setNotDone();
+            Chatowo.editTaskList(index, list.get(index));
             Chatowo.reply("    Oh... This task is not done yet... OwO\n      "
                     + list.get(index).toString());
         }
@@ -102,10 +104,16 @@ public class Chatowo {
     }
 
     public static void readTaskList() {
-        BufferedReader br = null;
+        File directory = new File("./data");
+        File file = new File("./data/chatowo.txt");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
         try {
-            new File("./data/chatowo.txt").createNewFile();
-            br = new BufferedReader(new FileReader("./data/chatowo.txt"));
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            BufferedReader br = new BufferedReader(new FileReader("./data/chatowo.txt"));
             String line = br.readLine();
             while (line != null) {
                 String[] taskDetails = line.split(" \\| ");
@@ -156,21 +164,62 @@ public class Chatowo {
     public static void removeFromTaskList(int index) {
         File originalFile = new File("./data/chatowo.txt");
         File tempFile = new File("./data/chatowo.txt.tmp");
-        BufferedReader br = null;
-        BufferedWriter bw = null;
 
         try {
             tempFile.createNewFile();
-            br = new BufferedReader(new FileReader(originalFile));
-            bw = new BufferedWriter(new FileWriter(tempFile));
+            BufferedReader br = new BufferedReader(new FileReader(originalFile));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
             String currentLine;
-            int lineCount = 0;
+            int lineCount = -1;
 
             currentLine = br.readLine();
             while (currentLine != null) {
                 lineCount++;
                 if (lineCount != index) {
-                    bw.write(currentLine + "\n");
+                    bw.write(currentLine);
+                    bw.newLine();
+                }
+                currentLine = br.readLine();
+            }
+
+            br.close();
+            bw.close();
+
+            // Delete the original file
+            if (!originalFile.delete()) {
+                throw new IOException("Could not delete original file");
+            }
+
+            // Rename the temporary file to the original file's name
+            if (!tempFile.renameTo(originalFile)) {
+                throw new IOException("Could not rename temporary file");
+            }
+
+        } catch (Exception e) {
+            Chatowo.reply(e.getMessage());
+        }
+    }
+
+    public static void editTaskList(int index, Task task) {
+        File originalFile = new File("./data/chatowo.txt");
+        File tempFile = new File("./data/chatowo.txt.tmp");
+
+        try {
+            tempFile.createNewFile();
+            BufferedReader br = new BufferedReader(new FileReader(originalFile));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+            String currentLine;
+            int lineCount = -1;
+
+            currentLine = br.readLine();
+            while (currentLine != null) {
+                lineCount++;
+                if (lineCount != index) {
+                    bw.write(currentLine);
+                    bw.newLine();
+                } else {
+                    bw.write(task.toDataString());
+                    bw.newLine();
                 }
                 currentLine = br.readLine();
             }
