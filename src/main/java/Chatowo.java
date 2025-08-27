@@ -83,8 +83,12 @@ public class Chatowo {
         } else if (deadlineindex == -1 || words[words.length - 1].equals("/by")) {
             throw new ChatowoException("    Oopsies... Add a /by for your deadline task pwease... >w<");
         } else {
-            Chatowo.addTask(new Deadline(input.substring(9, deadlineindex),
-                    input.substring(deadlineindex + 5)));
+            try {
+                Chatowo.addTask(new Deadline(input.substring(9, deadlineindex),
+                        input.substring(deadlineindex + 5)));
+            } catch (Exception e) {
+                Chatowo.reply("    Pwease put your date as yyyy-mm-dd format!!");
+            }
         }
     }
 
@@ -97,9 +101,13 @@ public class Chatowo {
                 words[words.length - 1].equals("/from") || words[words.length - 1].equals("/to")) {
             throw new ChatowoException("    Oopsies... Add a /to and /from for your event task pwease... >w<");
         } else {
-            Chatowo.addTask(new Event(input.substring(6, fromindex),
-                    input.substring(fromindex + 7, toindex),
-                    input.substring(toindex + 5)));
+            try {
+                Chatowo.addTask(new Event(input.substring(6, fromindex),
+                        input.substring(fromindex + 7, toindex),
+                        input.substring(toindex + 5)));
+            } catch (Exception e) {
+                Chatowo.reply("    Pwease put your date as yyyy-mm-dd format!!");
+            }
         }
     }
 
