@@ -1,3 +1,10 @@
+package chatowo;
+
+import chatowo.task.Deadline;
+import chatowo.task.Event;
+import chatowo.task.Task;
+import chatowo.task.ToDo;
+
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
