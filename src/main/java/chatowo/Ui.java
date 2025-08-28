@@ -1,3 +1,8 @@
+package chatowo;
+
+import chatowo.task.Task;
+import chatowo.task.TaskList;
+
 public class Ui {
     public void reply(String msg) {
         String divider = "\n~*~*~*~*~*~*~*~*~*~*~*~*~*~";
@@ -5,7 +10,7 @@ public class Ui {
     }
 
     public void greet() {
-        this.reply("    Hewwo! I'm Chatowo. :3\n    What can I do for you? OwO");
+        this.reply("    Hewwo! I'm chatowo.Chatowo. :3\n    What can I do for you? OwO");
     }
 
     public void addTask(Task task, int size) {
