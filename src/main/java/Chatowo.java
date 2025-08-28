@@ -1,317 +1,93 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.ArrayList;
+import java.time.format.DateTimeParseException;
 
 public class Chatowo {
     // initialise task list
-    private static ArrayList<Task> list = new ArrayList<>();
+    private TaskList list = new TaskList();
+    private final Storage storage = new Storage("./data/chatowo.txt");
+    private final Ui ui = new Ui();
+    private final Parser parser = new Parser(this);
 
-    public static void reply(String msg) {
-        String divider = "\n~*~*~*~*~*~*~*~*~*~*~*~*~*~";
-        System.out.println(msg + divider);
+    public void reply(String msg) {
+        ui.reply(msg);
     }
 
-    public static void addTask(Task task) {
+    public void listTasks() {
+        ui.listTasks(list);
+    }
+
+    public void dateTimeError() {
+        ui.dateTimeError();
+    }
+
+    public void addTask(Task task) {
         list.add(task);
-        Chatowo.reply("    Added " + task + " to task list! UwU\n" +
-                "    You have " + list.size() + " tasks now!!");
-
-        BufferedWriter bw;
-        try {
-            bw = new BufferedWriter(new FileWriter("./data/chatowo.txt", true));
-            bw.write(task.toDataString());
-            bw.newLine();
-            bw.close();
-        } catch (Exception e) {
-            Chatowo.reply(e.getMessage());
-        }
-    }
-
-    public static void mark(String[] words) throws ChatowoException {
-        if (words.length <= 1) {
-            throw new ChatowoException("    Oopsies... Pwease specify a task number... >w<");
-        } else {
-            int index = Integer.parseInt(words[1]) - 1;
-            list.get(index).setDone();
-            Chatowo.editTaskList(index, list.get(index));
-            Chatowo.reply("    Okie! This task is done! ^w^\n      "
-                    + list.get(index).toString());
-        }
-    }
-
-    public static void unmark(String[] words) throws ChatowoException {
-        if (words.length <= 1) {
-            throw new ChatowoException("    Oopsies... Pwease specify a task number... >w<");
-        } else {
-            int index = Integer.parseInt(words[1]) - 1;
-            list.get(index).setNotDone();
-            Chatowo.editTaskList(index, list.get(index));
-            Chatowo.reply("    Oh... This task is not done yet... OwO\n      "
-                    + list.get(index).toString());
-        }
-    }
-
-    public static void delete(String[] words) throws ChatowoException {
-        if (words.length <= 1) {
-            throw new ChatowoException("    Oopsies... Pwease specify a task number... >w<");
-        } else {
-            int index = Integer.parseInt(words[1]) - 1;
-            Task t = list.remove(index);
-            Chatowo.removeFromTaskList(index);
-            list.trimToSize();
-            Chatowo.reply("    Okie! This task has been deleted! ^w^\n    " + t);
-        }
-    }
-
-    public static void addTodoTask(String[] words, String input) throws ChatowoException {
-        if (words.length <= 1) {
-            throw new ChatowoException("    Oopsies... Add a name for your todo task pwease... >w<");
-        } else {
-            Chatowo.addTask(new ToDo(input.substring(5)));
-        }
-    }
-
-    public static void addDeadlineTask(String[] words, String input) throws ChatowoException {
-        int deadlineindex = input.lastIndexOf(" /by ");
-        if (words.length <= 1 || words[1].equals("/by")) {
-            throw new ChatowoException("    Oopsies... Add a name for your deadline task pwease... >w<");
-        } else if (deadlineindex == -1 || words[words.length - 1].equals("/by")) {
-            throw new ChatowoException("    Oopsies... Add a /by for your deadline task pwease... >w<");
-        } else {
-            try {
-                Chatowo.addTask(new Deadline(input.substring(9, deadlineindex),
-                        input.substring(deadlineindex + 5)));
-            } catch (Exception e) {
-                Chatowo.reply("    Pwease put your date as yyyy-mm-dd format!!");
-            }
-        }
-    }
-
-    public static void addEventTask(String[] words, String input) throws ChatowoException {
-        int fromindex = input.lastIndexOf(" /from ");
-        int toindex = input.lastIndexOf(" /to ");
-        if (words.length <= 1 || words[1].equals("/from") || words[1].equals("/to")) {
-            throw new ChatowoException("    Oopsies... Add a name for your event task pwease... >w<");
-        } else if (fromindex == -1 || toindex == -1 ||
-                words[words.length - 1].equals("/from") || words[words.length - 1].equals("/to")) {
-            throw new ChatowoException("    Oopsies... Add a /to and /from for your event task pwease... >w<");
-        } else {
-            try {
-                Chatowo.addTask(new Event(input.substring(6, fromindex),
-                        input.substring(fromindex + 7, toindex),
-                        input.substring(toindex + 5)));
-            } catch (Exception e) {
-                Chatowo.reply("    Pwease put your date as yyyy-mm-dd format!!");
-            }
-        }
-    }
-
-    public static void readTaskList() {
-        File directory = new File("./data");
-        File file = new File("./data/chatowo.txt");
-        if (!directory.exists()) {
-            directory.mkdir();
-        }
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            BufferedReader br = new BufferedReader(new FileReader("./data/chatowo.txt"));
-            String line = br.readLine();
-            while (line != null) {
-                String[] taskDetails = line.split(" \\| ");
-                if (taskDetails.length < 3) {
-                    throw new IOException("invalid data format");
-                }
-                switch (taskDetails[0]) {
-                    case "T":
-                        ToDo t = new ToDo(taskDetails[2]);
-                        list.add(t);
-                        if (taskDetails[1].equals("1")) {
-                            t.setDone();
-                        }
-                        break;
-
-                    case "D":
-                        if (taskDetails.length < 4) {
-                            throw new IOException("invalid data format");
-                        }
-                        Deadline d = new Deadline(taskDetails[2], taskDetails[3]);
-                        list.add(d);
-                        if (taskDetails[1].equals("1")) {
-                            d.setDone();
-                        }
-                        break;
-
-                    case "E":
-                        if (taskDetails.length < 5) {
-                            throw new IOException("invalid data format");
-                        }
-                        Event e = new Event(taskDetails[2], taskDetails[3], taskDetails[4]);
-                        list.add(e);
-                        if (taskDetails[1].equals("1")) {
-                            e.setDone();
-                        }
-                        break;
-
-                }
-                line = br.readLine();
-            }
-            br.close();
-        } catch (Exception e) {
-            Chatowo.reply(e.getMessage());
-        }
-
-    }
-
-    public static void removeFromTaskList(int index) {
-        File originalFile = new File("./data/chatowo.txt");
-        File tempFile = new File("./data/chatowo.txt.tmp");
+        ui.addTask(task, list.size());
 
         try {
-            tempFile.createNewFile();
-            BufferedReader br = new BufferedReader(new FileReader(originalFile));
-            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
-            String currentLine;
-            int lineCount = -1;
-
-            currentLine = br.readLine();
-            while (currentLine != null) {
-                lineCount++;
-                if (lineCount != index) {
-                    bw.write(currentLine);
-                    bw.newLine();
-                }
-                currentLine = br.readLine();
-            }
-
-            br.close();
-            bw.close();
-
-            // Delete the original file
-            if (!originalFile.delete()) {
-                throw new IOException("Could not delete original file");
-            }
-
-            // Rename the temporary file to the original file's name
-            if (!tempFile.renameTo(originalFile)) {
-                throw new IOException("Could not rename temporary file");
-            }
-
+            storage.addTask(task);
         } catch (Exception e) {
-            Chatowo.reply(e.getMessage());
+            ui.reply(e.getMessage());
         }
     }
 
-    public static void editTaskList(int index, Task task) {
-        File originalFile = new File("./data/chatowo.txt");
-        File tempFile = new File("./data/chatowo.txt.tmp");
-
+    public void readTaskList() {
         try {
-            tempFile.createNewFile();
-            BufferedReader br = new BufferedReader(new FileReader(originalFile));
-            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
-            String currentLine;
-            int lineCount = -1;
-
-            currentLine = br.readLine();
-            while (currentLine != null) {
-                lineCount++;
-                if (lineCount != index) {
-                    bw.write(currentLine);
-                    bw.newLine();
-                } else {
-                    bw.write(task.toDataString());
-                    bw.newLine();
-                }
-                currentLine = br.readLine();
-            }
-
-            br.close();
-            bw.close();
-
-            // Delete the original file
-            if (!originalFile.delete()) {
-                throw new IOException("Could not delete original file");
-            }
-
-            // Rename the temporary file to the original file's name
-            if (!tempFile.renameTo(originalFile)) {
-                throw new IOException("Could not rename temporary file");
-            }
-
-        } catch (Exception e) {
-            Chatowo.reply(e.getMessage());
+            list = storage.readTaskList();
+        } catch (IOException e) {
+            ui.reply(e.getMessage());
         }
+    }
+
+    public void removeFromTaskList(int index) {
+        try {
+            storage.removeFromTaskList(index);
+        } catch (IOException e) {
+            ui.reply(e.getMessage());
+        }
+    }
+
+    public void editTaskList(int index, Task task) {
+        try {
+            storage.editTaskList(index, task);
+        } catch (Exception e) {
+            ui.reply(e.getMessage());
+        }
+    }
+
+    public void mark(int index) {
+        Task t = list.get(index);
+        list.done(index);
+        this.editTaskList(index, t);
+        ui.doneTask(t);
+    }
+
+    public void unmark(int index) {
+        Task t = list.get(index);
+        list.undone(index);
+        this.editTaskList(index, t);
+        ui.undoneTask(t);
+    }
+
+    public void delete(int index) {
+        Task t = list.remove(index);
+        list.trimToSize();
+        this.removeFromTaskList(index);
+        ui.deleteTask(t);
+    }
+
+    public void run() {
+        ui.greet();
+
+        // read data file
+        this.readTaskList();
+
+        // continuously check input
+        parser.parse();
+        ui.bye();
     }
 
     public static void main(String[] args) {
-        // output greeting
-        String greeting = "    Hewwo! I'm Chatowo. :3\n    What can I do for you? OwO";
-        Chatowo.reply(greeting);
-
-        // read data file
-        Chatowo.readTaskList();
-
-        // initialise scanner for input
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-
-        // continuously check input
-        while (!input.equals("bye")) {
-            if (input.equals("list")) {
-                String listtext = "    Here are your tasks! >w<";
-                for (int i = 0; i < list.size(); i++) {
-                    String index = String.valueOf(i + 1);
-                    listtext += ("\n    " + index + "." + list.get(i).toString());
-                }
-                Chatowo.reply(listtext);
-            } else {
-                String[] words = input.split(" ");
-
-                try {
-                    switch (words[0]) {
-                    case "mark":
-                        Chatowo.mark(words);
-                        break;
-
-                    case "unmark":
-                        Chatowo.unmark(words);
-                        break;
-
-                    case "delete":
-                        Chatowo.delete(words);
-                        break;
-
-                    case "todo":
-                        Chatowo.addTodoTask(words, input);
-                        break;
-
-                    case "deadline":
-                        Chatowo.addDeadlineTask(words, input);
-                        break;
-
-                    case "event":
-                        Chatowo.addEventTask(words, input);
-                        break;
-
-                    default:
-                        throw new ChatowoException("    Oh nyo... I don't know... what you're saying... ;w;");
-                    }
-                } catch (ChatowoException e) {
-                    Chatowo.reply(e.getMessage());
-                }
-            }
-
-            input = scanner.nextLine();
-        }
-
-        String exit = "    Byebye -w-";
-        Chatowo.reply(exit);
+        new Chatowo().run();
     }
 }
