@@ -8,6 +8,10 @@ public class Task {
         this.name = name;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public void setDone() {
         this.done = true;
     }

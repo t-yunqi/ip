@@ -80,6 +80,16 @@ public class Chatowo {
         ui.deleteTask(t);
     }
 
+    public void find(String phrase) {
+        TaskList matchingTasks = new TaskList();
+        list.forEach((task) -> {
+            if (task.getName().contains(phrase)) {
+                matchingTasks.add(task);
+            }
+        });
+        ui.listMatchingTasks(matchingTasks);
+    }
+
     public void run() {
         ui.greet();
 
