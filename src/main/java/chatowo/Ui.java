@@ -35,6 +35,11 @@ public class Ui {
         this.reply(str);
     }
 
+    public void listMatchingTasks(TaskList list) {
+        String str = "    Here are the matching tasks! >w<" + list;
+        this.reply(str);
+    }
+
     public void doneTask(Task task) {
         this.reply("    Okie! This task is done! ^w^\n      " + task);
     }

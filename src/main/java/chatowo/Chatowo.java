@@ -110,6 +110,16 @@ public class Chatowo {
         ui.deleteTask(t);
     }
 
+    public void find(String phrase) {
+        TaskList matchingTasks = new TaskList();
+        list.forEach((task) -> {
+            if (task.getName().contains(phrase)) {
+                matchingTasks.add(task);
+            }
+        });
+        ui.listMatchingTasks(matchingTasks);
+    }
+
     /**
      * Starts the chat bot and handles user input until exit command.
      * Reads initial task list from storage and processes commands.

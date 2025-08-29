@@ -12,6 +12,10 @@ public abstract class Task {
         this.name = name;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     /**
      * Updates the isDone status to true.
      */

@@ -61,6 +61,10 @@ public class Parser {
                         this.addEventTask(words, input);
                         break;
 
+                    case "find":
+                        this.findTask(words, input);
+                        break;
+
                     default:
                         throw new ChatowoException("    Oh nyo... I don't know... what you're saying... ;w;");
                     }
@@ -164,6 +168,15 @@ public class Parser {
                     input.substring(fromIndex + 7, toIndex),
                     input.substring(toIndex + 5));
             chatowo.addTask(e);
+        }
+    }
+
+    public void findTask(String[] words, String input) throws ChatowoException {
+        if (words.length <= 1) {
+            throw new ChatowoException("    Oopsies... Say what you want to find pwease... >w<");
+        } else {
+            String phrase = input.substring(5);
+            chatowo.find(phrase);
         }
     }
 }
