@@ -3,12 +3,24 @@ package chatowo;
 import chatowo.task.Task;
 import chatowo.task.TaskList;
 
+/**
+ * Handles user interface interactions and message formatting.
+ * Provides consistent styling for bot responses.
+ */
 public class Ui {
+    /**
+     * Formats and displays a response message from the bot.
+     *
+     * @param msg Message to display
+     */
     public void reply(String msg) {
         String divider = "\n~*~*~*~*~*~*~*~*~*~*~*~*~*~";
         System.out.println(msg + divider);
     }
 
+    /**
+     * Displays the welcome message when bot starts.
+     */
     public void greet() {
         this.reply("    Hewwo! I'm chatowo.Chatowo. :3\n    What can I do for you? OwO");
     }

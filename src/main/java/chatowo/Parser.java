@@ -8,13 +8,21 @@ import chatowo.task.ToDo;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+/**
+ * Handles parsing and interpretation of user input commands.
+ * Converts raw input strings into actionable commands.
+ */
 public class Parser {
     Chatowo chatowo;
+
 
     public Parser(Chatowo chatowo) {
         this.chatowo = chatowo;
     }
 
+    /**
+     * Parses user input and executes corresponding commands.
+     */
     public void parse() {
         // initialise scanner for input
         Scanner scanner = new Scanner(System.in);
@@ -69,6 +77,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Marks a task as done based on user input.
+     *
+     * @param words Array of input words containing task index
+     * @throws ChatowoException if index is missing
+     */
     public void mark(String[] words) throws ChatowoException {
         if (words.length <= 1) {
             throw new ChatowoException("    Oopsies... Pwease specify a task number... >w<");
@@ -78,6 +92,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Unmarks a previously completed task.
+     *
+     * @param words Array of input words containing task index
+     * @throws ChatowoException if index is missing
+     */
     public void unmark(String[] words) throws ChatowoException {
         if (words.length <= 1) {
             throw new ChatowoException("    Oopsies... Pwease specify a task number... >w<");
@@ -96,6 +116,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Adds a new todo task from user input.
+     *
+     * @param words Array of input words
+     * @param input Original input string
+     * @throws ChatowoException if task description is missing
+     */
     public void addTodoTask(String[] words, String input) throws ChatowoException {
         if (words.length <= 1) {
             throw new ChatowoException("    Oopsies... Add a name for your todo task pwease... >w<");
@@ -104,6 +131,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Adds a new deadline task to the task list.
+     *
+     * @param words Array of input words containing task details
+     * @param input Original input string
+     * @throws Exception if task format is invalid
+     */
     public void addDeadlineTask(String[] words, String input) throws Exception {
         int deadlineindex = input.lastIndexOf(" /by ");
         if (words.length <= 1 || words[1].equals("/by")) {

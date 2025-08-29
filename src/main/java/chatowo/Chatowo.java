@@ -5,6 +5,10 @@ import chatowo.task.TaskList;
 
 import java.io.IOException;
 
+/**
+ * Main class that handles the chat bot functionality.
+ * Manages tasks, user interactions, and file operations.
+ */
 public class Chatowo {
     // initialise task list
     private TaskList list = new TaskList();
@@ -43,6 +47,11 @@ public class Chatowo {
         }
     }
 
+    /**
+     * Removes a task from the data file at specified index.
+     *
+     * @param index Index of task to remove
+     */
     public void removeFromTaskList(int index) {
         try {
             storage.removeFromTaskList(index);
@@ -51,6 +60,12 @@ public class Chatowo {
         }
     }
 
+    /**
+     * Edits a specific task in the data file.
+     *
+     * @param index Index of task to edit
+     * @param task New task to replace existing one
+     */
     public void editTaskList(int index, Task task) {
         try {
             storage.editTaskList(index, task);
@@ -59,6 +74,11 @@ public class Chatowo {
         }
     }
 
+    /**
+     * Marks a task as done at the specified index.
+     *
+     * @param index Index of task to mark
+     */
     public void mark(int index) {
         Task t = list.get(index);
         list.done(index);
@@ -66,6 +86,11 @@ public class Chatowo {
         ui.doneTask(t);
     }
 
+    /**
+     * Marks a task as undone at the specified index.
+     *
+     * @param index Index of task to mark
+     */
     public void unmark(int index) {
         Task t = list.get(index);
         list.undone(index);
@@ -73,6 +98,11 @@ public class Chatowo {
         ui.undoneTask(t);
     }
 
+    /**
+     * Removes a task at the specified index.
+     *
+     * @param index Index of task to remove
+     */
     public void delete(int index) {
         Task t = list.remove(index);
         list.trimToSize();
@@ -80,6 +110,10 @@ public class Chatowo {
         ui.deleteTask(t);
     }
 
+    /**
+     * Starts the chat bot and handles user input until exit command.
+     * Reads initial task list from storage and processes commands.
+     */
     public void run() {
         ui.greet();
 
