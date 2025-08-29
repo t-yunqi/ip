@@ -36,36 +36,35 @@ public class Storage {
                 throw new IOException("invalid data format");
             }
             switch (taskDetails[0]) {
-                case "T":
-                    ToDo t = new ToDo(taskDetails[2]);
-                    tasks.add(t);
-                    if (taskDetails[1].equals("1")) {
-                        t.setDone();
-                    }
-                    break;
+            case "T":
+                ToDo t = new ToDo(taskDetails[2]);
+                tasks.add(t);
+                if (taskDetails[1].equals("1")) {
+                    t.setDone();
+                }
+                break;
 
-                case "D":
-                    if (taskDetails.length < 4) {
-                        throw new IOException("invalid data format");
-                    }
-                    Deadline d = new Deadline(taskDetails[2], taskDetails[3]);
-                    tasks.add(d);
-                    if (taskDetails[1].equals("1")) {
-                        d.setDone();
-                    }
-                    break;
+            case "D":
+                if (taskDetails.length < 4) {
+                    throw new IOException("invalid data format");
+                }
+                Deadline d = new Deadline(taskDetails[2], taskDetails[3]);
+                tasks.add(d);
+                if (taskDetails[1].equals("1")) {
+                    d.setDone();
+                }
+                break;
 
-                case "E":
-                    if (taskDetails.length < 5) {
-                        throw new IOException("invalid data format");
-                    }
-                    Event e = new Event(taskDetails[2], taskDetails[3], taskDetails[4]);
-                    tasks.add(e);
-                    if (taskDetails[1].equals("1")) {
-                        e.setDone();
-                    }
-                    break;
-
+            case "E":
+                if (taskDetails.length < 5) {
+                    throw new IOException("invalid data format");
+                }
+                Event e = new Event(taskDetails[2], taskDetails[3], taskDetails[4]);
+                tasks.add(e);
+                if (taskDetails[1].equals("1")) {
+                    e.setDone();
+                }
+                break;
             }
             line = br.readLine();
         }

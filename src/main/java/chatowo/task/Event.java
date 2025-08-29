@@ -5,8 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Event extends Task {
-    public LocalDate from;
-    public LocalDate to;
+    private LocalDate from;
+    private LocalDate to;
 
     public Event(String name, String from, String to) throws DateTimeParseException {
         super(name);

@@ -1,8 +1,8 @@
 package chatowo.task;
 
 public class Task {
-    public String name;
-    public boolean done = false;
+    private String name;
+    private boolean done = false;
 
     public Task(String name) {
         this.name = name;
