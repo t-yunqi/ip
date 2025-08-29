@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
  * Extends Task with deadline date functionality.
  */
 public class Deadline extends Task {
-    public LocalDate deadline;
+    private LocalDate deadline;
 
     /**
      * Creates a new deadline task.

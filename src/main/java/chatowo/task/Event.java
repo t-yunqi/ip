@@ -9,8 +9,8 @@ import java.time.format.DateTimeParseException;
  * Extends Task with event timing functionality.
  */
 public class Event extends Task {
-    public LocalDate from;
-    public LocalDate to;
+    private LocalDate from;
+    private LocalDate to;
 
     /**
      * Creates a new event task.
