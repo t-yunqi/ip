@@ -1,6 +1,10 @@
 package chatowo;
 
-import chatowo.task.*;
+import chatowo.task.Deadline;
+import chatowo.task.Event;
+import chatowo.task.Task;
+import chatowo.task.TaskList;
+import chatowo.task.ToDo;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

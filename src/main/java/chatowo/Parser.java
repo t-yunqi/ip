@@ -6,7 +6,6 @@ import chatowo.task.Task;
 import chatowo.task.ToDo;
 
 import java.time.format.DateTimeParseException;
-import java.util.Scanner;
 
 /**
  * Handles parsing and interpretation of user input commands.
@@ -15,7 +14,6 @@ import java.util.Scanner;
 public class Parser {
     private Chatowo chatowo;
 
-
     public Parser(Chatowo chatowo) {
         this.chatowo = chatowo;
     }
@@ -23,61 +21,45 @@ public class Parser {
     /**
      * Parses user input and executes corresponding commands.
      */
-    public void parse() {
-        // initialise scanner for input
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
+    public String parse(String input) {
 
-        // continuously check input
-        while (!input.equals("bye")) {
-            if (input.equals("list")) {
-                chatowo.listTasks();
-            } else {
-                String[] words = input.split(" ");
+        String[] words = input.split(" ");
 
-                try {
-                    switch (words[0]) {
-                    case "mark":
-                        this.mark(words);
-                        break;
+        try {
+            switch (words[0]) {
+            case "list":
+                return chatowo.listTasks();
 
-                    case "unmark":
-                        this.unmark(words);
-                        break;
+            case "mark":
+                return this.mark(words);
 
-                    case "delete":
-                        this.delete(words);
-                        break;
+            case "unmark":
+                return this.unmark(words);
 
-                    case "todo":
-                        this.addTodoTask(words, input);
-                        break;
+            case "delete":
+                return this.delete(words);
 
-                    case "deadline":
-                        this.addDeadlineTask(words, input);
-                        break;
+            case "todo":
+                return this.addTodoTask(words, input);
 
-                    case "event":
-                        this.addEventTask(words, input);
-                        break;
+            case "deadline":
+                return this.addDeadlineTask(words, input);
 
-                    case "find":
-                        this.findTask(words, input);
-                        break;
+            case "event":
+                return this.addEventTask(words, input);
 
-                    default:
-                        throw new ChatowoException("    Oh nyo... I don't know... what you're saying... ;w;");
-                    }
-                } catch (Exception e) {
-                    if (e instanceof DateTimeParseException) {
-                        chatowo.dateTimeError();
-                    } else {
-                        chatowo.reply(e.getMessage());
-                    }
-                }
+            case "find":
+                return this.findTask(words, input);
+
+            default:
+                throw new ChatowoException("Oh nyo... I don't know... what you're saying... ;w;");
             }
-
-            input = scanner.nextLine();
+        } catch (Exception e) {
+            if (e instanceof DateTimeParseException) {
+                return chatowo.dateTimeError();
+            } else {
+                return e.getMessage();
+            }
         }
     }
 
@@ -87,12 +69,12 @@ public class Parser {
      * @param words Array of input words containing task index
      * @throws ChatowoException if index is missing
      */
-    public void mark(String[] words) throws ChatowoException {
+    public String mark(String[] words) throws ChatowoException {
         if (words.length <= 1) {
-            throw new ChatowoException("    Oopsies... Pwease specify a task number... >w<");
+            throw new ChatowoException("Oopsies... Pwease specify a task number... >w<");
         } else {
             int index = Integer.parseInt(words[1]) - 1;
-            chatowo.mark(index);
+            return chatowo.mark(index);
         }
     }
 
@@ -102,21 +84,21 @@ public class Parser {
      * @param words Array of input words containing task index
      * @throws ChatowoException if index is missing
      */
-    public void unmark(String[] words) throws ChatowoException {
+    public String unmark(String[] words) throws ChatowoException {
         if (words.length <= 1) {
-            throw new ChatowoException("    Oopsies... Pwease specify a task number... >w<");
+            throw new ChatowoException("Oopsies... Pwease specify a task number... >w<");
         } else {
             int index = Integer.parseInt(words[1]) - 1;
-            chatowo.unmark(index);
+            return chatowo.unmark(index);
         }
     }
 
-    public void delete(String[] words) throws ChatowoException {
+    public String delete(String[] words) throws ChatowoException {
         if (words.length <= 1) {
-            throw new ChatowoException("    Oopsies... Pwease specify a task number... >w<");
+            throw new ChatowoException("Oopsies... Pwease specify a task number... >w<");
         } else {
             int index = Integer.parseInt(words[1]) - 1;
-            chatowo.delete(index);
+            return chatowo.delete(index);
         }
     }
 
@@ -127,11 +109,11 @@ public class Parser {
      * @param input Original input string
      * @throws ChatowoException if task description is missing
      */
-    public void addTodoTask(String[] words, String input) throws ChatowoException {
+    public String addTodoTask(String[] words, String input) throws ChatowoException {
         if (words.length <= 1) {
-            throw new ChatowoException("    Oopsies... Add a name for your todo task pwease... >w<");
+            throw new ChatowoException("Oopsies... Add a name for your todo task pwease... >w<");
         } else {
-            chatowo.addTask(new ToDo(input.substring(5)));
+            return chatowo.addTask(new ToDo(input.substring(5)));
         }
     }
 
@@ -142,24 +124,24 @@ public class Parser {
      * @param input Original input string
      * @throws Exception if task format is invalid
      */
-    public void addDeadlineTask(String[] words, String input) throws Exception {
+    public String addDeadlineTask(String[] words, String input) throws Exception {
         int deadlineIndex = input.lastIndexOf(" /by ");
         if (words.length <= 1 || words[1].equals("/by")) {
-            throw new ChatowoException("    Oopsies... Add a name for your deadline task pwease... >w<");
+            throw new ChatowoException("Oopsies... Add a name for your deadline task pwease... >w<");
         } else if (deadlineIndex == -1 || words[words.length - 1].equals("/by")) {
-            throw new ChatowoException("    Oopsies... Add a /by for your deadline task pwease... >w<");
+            throw new ChatowoException("Oopsies... Add a /by for your deadline task pwease... >w<");
         } else {
             Task d = new Deadline(input.substring(9, deadlineIndex),
                     input.substring(deadlineIndex + 5));
-            chatowo.addTask(d);
+            return chatowo.addTask(d);
         }
     }
 
-    public void addEventTask(String[] words, String input) throws Exception {
+    public String addEventTask(String[] words, String input) throws Exception {
         int fromIndex = input.lastIndexOf(" /from ");
         int toIndex = input.lastIndexOf(" /to ");
         if (words.length <= 1 || words[1].equals("/from") || words[1].equals("/to")) {
-            throw new ChatowoException("    Oopsies... Add a name for your event task pwease... >w<");
+            throw new ChatowoException("Oopsies... Add a name for your event task pwease... >w<");
         } else if (fromIndex == -1 || toIndex == -1 ||
                 words[words.length - 1].equals("/from") || words[words.length - 1].equals("/to")) {
             throw new ChatowoException("    Oopsies... Add a /to and /from for your event task pwease... >w<");
@@ -167,16 +149,16 @@ public class Parser {
             Task e = new Event(input.substring(6, fromIndex),
                     input.substring(fromIndex + 7, toIndex),
                     input.substring(toIndex + 5));
-            chatowo.addTask(e);
+            return chatowo.addTask(e);
         }
     }
 
-    public void findTask(String[] words, String input) throws ChatowoException {
+    public String findTask(String[] words, String input) throws ChatowoException {
         if (words.length <= 1) {
-            throw new ChatowoException("    Oopsies... Say what you want to find pwease... >w<");
+            throw new ChatowoException("Oopsies... Say what you want to find pwease... >w<");
         } else {
             String phrase = input.substring(5);
-            chatowo.find(phrase);
+            return chatowo.find(phrase);
         }
     }
 }

@@ -13,64 +13,28 @@ public class Chatowo {
     // initialise task list
     private TaskList list = new TaskList();
     private final Storage storage = new Storage("./data/chatowo.txt");
-    private final Ui ui = new Ui();
     private final Parser parser = new Parser(this);
 
-    public void reply(String msg) {
-        ui.reply(msg);
+    public String getResponse(String input) {
+        return parser.parse(input);
     }
 
-    public void listTasks() {
-        ui.listTasks(list);
+    public String listTasks() {
+        return "Here are your tasks! >w<" + list;
     }
 
-    public void dateTimeError() {
-        ui.dateTimeError();
+    public String dateTimeError() {
+        return "Pwease put your date as yyyy-mm-dd format!! >m<";
     }
 
-    public void addTask(Task task) {
-        list.add(task);
-        ui.addTask(task, list.size());
-
+    public String addTask(Task task) {
         try {
+            list.add(task);
             storage.addTask(task);
+            return "Added " + task + " to task list! UwU\n" +
+                    "You have " + list.size() + " tasks now!!";
         } catch (Exception e) {
-            ui.reply(e.getMessage());
-        }
-    }
-
-    public void readTaskList() {
-        try {
-            list = storage.readTaskList();
-        } catch (IOException e) {
-            ui.reply(e.getMessage());
-        }
-    }
-
-    /**
-     * Removes a task from the data file at specified index.
-     *
-     * @param index Index of task to remove
-     */
-    public void removeFromTaskList(int index) {
-        try {
-            storage.removeFromTaskList(index);
-        } catch (IOException e) {
-            ui.reply(e.getMessage());
-        }
-    }
-
-    /**
-     * Edits a specific task in the data file.
-     *
-     * @param index Index of task to edit
-     * @param task New task to replace existing one
-     */
-    public void editTaskList(int index, Task task) {
-        try {
-            storage.editTaskList(index, task);
-        } catch (Exception e) {
-            ui.reply(e.getMessage());
+            return e.getMessage();
         }
     }
 
@@ -79,11 +43,17 @@ public class Chatowo {
      *
      * @param index Index of task to mark
      */
-    public void mark(int index) {
+    public String mark(int index) {
         Task t = list.get(index);
         list.done(index);
-        this.editTaskList(index, t);
-        ui.doneTask(t);
+
+        try {
+            storage.editTaskList(index, t);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return "Okie! This task is done! ^w^\n  " + t;
     }
 
     /**
@@ -91,11 +61,17 @@ public class Chatowo {
      *
      * @param index Index of task to mark
      */
-    public void unmark(int index) {
+    public String unmark(int index) {
         Task t = list.get(index);
         list.undone(index);
-        this.editTaskList(index, t);
-        ui.undoneTask(t);
+
+        try {
+            storage.editTaskList(index, t);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return "Oh... This task is not done yet... OwO\n  " + t;
     }
 
     /**
@@ -103,39 +79,36 @@ public class Chatowo {
      *
      * @param index Index of task to remove
      */
-    public void delete(int index) {
+    public String delete(int index) {
         Task t = list.remove(index);
         list.trimToSize();
-        this.removeFromTaskList(index);
-        ui.deleteTask(t);
+        try {
+            storage.removeFromTaskList(index);
+            return "Okie! This task has been deleted! ^w^\n  " + t;
+        } catch (IOException e) {
+            return e.getMessage();
+        }
     }
 
-    public void find(String phrase) {
+    public String find(String phrase) {
         TaskList matchingTasks = new TaskList();
         list.forEach((task) -> {
             if (task.getName().contains(phrase)) {
                 matchingTasks.add(task);
             }
         });
-        ui.listMatchingTasks(matchingTasks);
+        return "Here are the matching tasks! >w<" + list;
     }
 
     /**
-     * Starts the chat bot and handles user input until exit command.
-     * Reads initial task list from storage and processes commands.
+     * Starts the chat bot and reads initial task list from storage.
      */
-    public void run() {
-        ui.greet();
-
-        // read data file
-        this.readTaskList();
-
-        // continuously check input
-        parser.parse();
-        ui.bye();
-    }
-
-    public static void main(String[] args) {
-        new Chatowo().run();
+    public String init() {
+        try {
+            list = storage.readTaskList();
+            return "Hewwo! I'm Chatowo. :3\nWhat can I do for you? OwO";
+        } catch (IOException e) {
+            return (e.getMessage());
+        }
     }
 }
