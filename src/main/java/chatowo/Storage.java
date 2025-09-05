@@ -1,17 +1,17 @@
 package chatowo;
 
-import chatowo.task.Deadline;
-import chatowo.task.Event;
-import chatowo.task.Task;
-import chatowo.task.TaskList;
-import chatowo.task.ToDo;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import chatowo.task.Deadline;
+import chatowo.task.Event;
+import chatowo.task.Task;
+import chatowo.task.TaskList;
+import chatowo.task.ToDo;
 
 public class Storage {
     private String path;
@@ -47,7 +47,6 @@ public class Storage {
                     t.setDone();
                 }
                 break;
-
             case "D":
                 if (taskDetails.length < 4) {
                     throw new IOException("invalid data format");
@@ -58,7 +57,6 @@ public class Storage {
                     d.setDone();
                 }
                 break;
-
             case "E":
                 if (taskDetails.length < 5) {
                     throw new IOException("invalid data format");
@@ -69,6 +67,8 @@ public class Storage {
                     e.setDone();
                 }
                 break;
+            default:
+                throw new IOException("invalid data format");
             }
             line = br.readLine();
         }
@@ -125,7 +125,7 @@ public class Storage {
         processFile((line, lineIndex) -> lineIndex == index ? task.toDataString() : line);
     }
 
-    public void addTask(Task task) throws IOException{
+    public void addTask(Task task) throws IOException {
         BufferedWriter bw;
         bw = new BufferedWriter(new FileWriter(path, true));
         bw.write(task.toDataString());

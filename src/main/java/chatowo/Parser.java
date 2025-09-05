@@ -1,11 +1,11 @@
 package chatowo;
 
+import java.time.format.DateTimeParseException;
+
 import chatowo.task.Deadline;
 import chatowo.task.Event;
 import chatowo.task.Task;
 import chatowo.task.ToDo;
-
-import java.time.format.DateTimeParseException;
 
 /**
  * Handles parsing and interpretation of user input commands.
@@ -142,8 +142,9 @@ public class Parser {
         int toIndex = input.lastIndexOf(" /to ");
         if (words.length <= 1 || words[1].equals("/from") || words[1].equals("/to")) {
             throw new ChatowoException("Oopsies... Add a name for your event task pwease... >w<");
-        } else if (fromIndex == -1 || toIndex == -1 ||
-                words[words.length - 1].equals("/from") || words[words.length - 1].equals("/to")) {
+        } else if (fromIndex == -1 || toIndex == -1
+                || words[words.length - 1].equals("/from")
+                || words[words.length - 1].equals("/to")) {
             throw new ChatowoException("    Oopsies... Add a /to and /from for your event task pwease... >w<");
         } else {
             Task e = new Event(input.substring(6, fromIndex),
