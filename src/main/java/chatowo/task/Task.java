@@ -5,8 +5,8 @@ package chatowo.task;
  * Provides common functionality for tasks in the system.
  */
 public abstract class Task {
-    public String name;
-    public boolean done = false;
+    private String name;
+    private boolean done = false;
 
     public Task(String name) {
         this.name = name;

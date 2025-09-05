@@ -1,9 +1,9 @@
 package chatowo;
 
+import java.io.IOException;
+
 import chatowo.task.Task;
 import chatowo.task.TaskList;
-
-import java.io.IOException;
 
 /**
  * Main class that handles the chat bot functionality.
@@ -31,8 +31,8 @@ public class Chatowo {
         try {
             list.add(task);
             storage.addTask(task);
-            return "Added " + task + " to task list! UwU\n" +
-                    "You have " + list.size() + " tasks now!!";
+            return "Added " + task + " to task list! UwU\n"
+                    + "You have " + list.size() + " tasks now!!";
         } catch (Exception e) {
             return e.getMessage();
         }

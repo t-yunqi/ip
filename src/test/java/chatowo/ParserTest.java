@@ -1,15 +1,15 @@
 package chatowo;
 
-import org.junit.jupiter.api.Test;
-
-import java.time.format.DateTimeParseException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.time.format.DateTimeParseException;
+
+import org.junit.jupiter.api.Test;
+
 public class ParserTest {
-    Parser parser = new Parser(new Chatowo());
+    private Parser parser = new Parser(new Chatowo());
 
     @Test
     public void addTodoTask_noName_exceptionThrown() {
