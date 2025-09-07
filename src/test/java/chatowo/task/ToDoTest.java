@@ -9,6 +9,6 @@ public class ToDoTest {
     public void toDataString() {
         Task t = new ToDo("2103 ip");
         t.setDone();
-        assertEquals("T | 1 | 2103 ip", t.toString());
+        assertEquals("T | 1 | 2103 ip", t.toDataString());
     }
 }
