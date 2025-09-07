@@ -6,7 +6,7 @@ import chatowo.task.Task;
 import chatowo.task.TaskList;
 
 /**
- * Main class that handles the chat bot functionality.
+ * Main class that handles the chatbot functionality.
  * Manages tasks, user interactions, and file operations.
  */
 public class Chatowo {
@@ -27,6 +27,11 @@ public class Chatowo {
         return "Pwease put your date as yyyy-mm-dd format!! >m<";
     }
 
+    /**
+     * Adds the specified task into the task list.
+     *
+     * @param task Task to add
+     */
     public String addTask(Task task) {
         try {
             list.add(task);
@@ -90,6 +95,11 @@ public class Chatowo {
         }
     }
 
+    /**
+     * Returns a string of tasks that matches the specified query.
+     *
+     * @param phrase Phrase to find in task
+     */
     public String find(String phrase) {
         TaskList matchingTasks = new TaskList();
         list.forEach((task) -> {
@@ -97,11 +107,11 @@ public class Chatowo {
                 matchingTasks.add(task);
             }
         });
-        return "Here are the matching tasks! >w<" + list;
+        return "Here are the matching tasks! >w<" + matchingTasks;
     }
 
     /**
-     * Starts the chat bot and reads initial task list from storage.
+     * Starts the chatbot and reads initial task list from storage.
      */
     public String init() {
         try {
