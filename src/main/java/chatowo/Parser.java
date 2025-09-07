@@ -79,10 +79,10 @@ public class Parser {
     public String mark(String[] words) throws ChatowoException {
         if (words.length <= 1) {
             throw new ChatowoException("Oopsies... Pwease specify a task number... >w<");
-        } else {
-            int index = Integer.parseInt(words[1]) - 1;
-            return chatowo.mark(index);
         }
+
+        int index = Integer.parseInt(words[1]) - 1;
+        return chatowo.mark(index);
     }
 
     /**
@@ -94,10 +94,10 @@ public class Parser {
     public String unmark(String[] words) throws ChatowoException {
         if (words.length <= 1) {
             throw new ChatowoException("Oopsies... Pwease specify a task number... >w<");
-        } else {
-            int index = Integer.parseInt(words[1]) - 1;
-            return chatowo.unmark(index);
         }
+
+        int index = Integer.parseInt(words[1]) - 1;
+        return chatowo.unmark(index);
     }
 
     /**
@@ -109,10 +109,10 @@ public class Parser {
     public String delete(String[] words) throws ChatowoException {
         if (words.length <= 1) {
             throw new ChatowoException("Oopsies... Pwease specify a task number... >w<");
-        } else {
-            int index = Integer.parseInt(words[1]) - 1;
-            return chatowo.delete(index);
         }
+
+        int index = Integer.parseInt(words[1]) - 1;
+        return chatowo.delete(index);
     }
 
     /**
@@ -125,9 +125,10 @@ public class Parser {
     public String addTodoTask(String[] words, String input) throws ChatowoException {
         if (words.length <= 1) {
             throw new ChatowoException("Oopsies... Add a name for your todo task pwease... >w<");
-        } else {
-            return chatowo.addTask(new ToDo(input.substring(5)));
         }
+
+        String name = input.substring(5);
+        return chatowo.addTask(new ToDo(name));
     }
 
     /**
@@ -139,15 +140,21 @@ public class Parser {
      */
     public String addDeadlineTask(String[] words, String input) throws Exception {
         int deadlineIndex = input.lastIndexOf(" /by ");
+
+        // No task name specified
         if (words.length <= 1 || words[1].equals("/by")) {
             throw new ChatowoException("Oopsies... Add a name for your deadline task pwease... >w<");
-        } else if (deadlineIndex == -1 || words[words.length - 1].equals("/by")) {
-            throw new ChatowoException("Oopsies... Add a /by for your deadline task pwease... >w<");
-        } else {
-            Task d = new Deadline(input.substring(9, deadlineIndex),
-                    input.substring(deadlineIndex + 5));
-            return chatowo.addTask(d);
         }
+
+        // No deadline date specified
+        if (deadlineIndex == -1 || words[words.length - 1].equals("/by")) {
+            throw new ChatowoException("Oopsies... Add a /by for your deadline task pwease... >w<");
+        }
+
+        String name = input.substring(9, deadlineIndex);
+        String deadline = input.substring(deadlineIndex + 5);
+        Task d = new Deadline(name, deadline);
+        return chatowo.addTask(d);
     }
 
     /**
@@ -160,18 +167,24 @@ public class Parser {
     public String addEventTask(String[] words, String input) throws Exception {
         int fromIndex = input.lastIndexOf(" /from ");
         int toIndex = input.lastIndexOf(" /to ");
+
+        // No task name specified
         if (words.length <= 1 || words[1].equals("/from") || words[1].equals("/to")) {
             throw new ChatowoException("Oopsies... Add a name for your event task pwease... >w<");
-        } else if (fromIndex == -1 || toIndex == -1
+        }
+
+        // No /to or /from dates specified
+        if (fromIndex == -1 || toIndex == -1
                 || words[words.length - 1].equals("/from")
                 || words[words.length - 1].equals("/to")) {
-            throw new ChatowoException("    Oopsies... Add a /to and /from for your event task pwease... >w<");
-        } else {
-            Task e = new Event(input.substring(6, fromIndex),
-                    input.substring(fromIndex + 7, toIndex),
-                    input.substring(toIndex + 5));
-            return chatowo.addTask(e);
+            throw new ChatowoException("Oopsies... Add a /to and /from for your event task pwease... >w<");
         }
+
+        String name = input.substring(6, fromIndex);
+        String from = input.substring(fromIndex + 7, toIndex);
+        String to = input.substring(toIndex + 5);
+        Task e = new Event(name, from, to);
+        return chatowo.addTask(e);
     }
 
     /**
@@ -184,9 +197,9 @@ public class Parser {
     public String findTask(String[] words, String input) throws ChatowoException {
         if (words.length <= 1) {
             throw new ChatowoException("Oopsies... Say what you want to find pwease... >w<");
-        } else {
-            String phrase = input.substring(5);
-            return chatowo.find(phrase);
         }
+
+        String phrase = input.substring(5);
+        return chatowo.find(phrase);
     }
 }

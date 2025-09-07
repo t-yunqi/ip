@@ -30,6 +30,21 @@ public class TaskList extends ArrayList<Task> {
         }
     }
 
+    /**
+     * Returns a TaskList containing tasks that match the specified query.
+     *
+     * @param phrase Phrase to find in task
+     */
+    public TaskList find(String phrase) {
+        TaskList matchingTasks = new TaskList();
+        this.forEach((task) -> {
+            if (task.getName().contains(phrase)) {
+                matchingTasks.add(task);
+            }
+        });
+        return matchingTasks;
+    }
+
     @Override
     public String toString() {
         String str = "";

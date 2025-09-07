@@ -47,44 +47,51 @@ public class Storage {
         String line = br.readLine();
         while (line != null) {
             String[] taskDetails = line.split(" \\| ");
+
             if (taskDetails.length < 3) {
                 throw new IOException("invalid data format");
             }
-            switch (taskDetails[0]) {
-            case "T":
-                ToDo t = new ToDo(taskDetails[2]);
-                tasks.add(t);
-                if (taskDetails[1].equals("1")) {
-                    t.setDone();
-                }
-                break;
-            case "D":
-                if (taskDetails.length < 4) {
-                    throw new IOException("invalid data format");
-                }
-                Deadline d = new Deadline(taskDetails[2], taskDetails[3]);
-                tasks.add(d);
-                if (taskDetails[1].equals("1")) {
-                    d.setDone();
-                }
-                break;
-            case "E":
-                if (taskDetails.length < 5) {
-                    throw new IOException("invalid data format");
-                }
-                Event e = new Event(taskDetails[2], taskDetails[3], taskDetails[4]);
-                tasks.add(e);
-                if (taskDetails[1].equals("1")) {
-                    e.setDone();
-                }
-                break;
-            default:
-                throw new IOException("invalid data format");
-            }
+
+            Task t = parseData(taskDetails);
+            tasks.add(t);
+
             line = br.readLine();
         }
+
         br.close();
         return tasks;
+    }
+
+    private Task parseData(String[] taskDetails) throws IOException {
+        Task t;
+
+        switch (taskDetails[0]) {
+        case "T":
+            t = new ToDo(taskDetails[2]);
+            break;
+        case "D":
+            if (taskDetails.length < 4) {
+                throw new IOException("invalid data format");
+            }
+
+            t = new Deadline(taskDetails[2], taskDetails[3]);
+            break;
+        case "E":
+            if (taskDetails.length < 5) {
+                throw new IOException("invalid data format");
+            }
+
+            t = new Event(taskDetails[2], taskDetails[3], taskDetails[4]);
+            break;
+        default:
+            throw new IOException("invalid data format");
+        }
+
+        if (taskDetails[1].equals("1")) {
+            t.setDone();
+        }
+
+        return t;
     }
 
     private interface LineEditor {
