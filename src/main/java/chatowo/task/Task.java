@@ -16,6 +16,10 @@ public abstract class Task {
         return this.name;
     }
 
+    public boolean isDone() {
+        return this.done;
+    }
+
     /**
      * Updates the isDone status to true.
      */

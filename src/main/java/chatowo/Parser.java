@@ -20,6 +20,8 @@ public class Parser {
 
     /**
      * Parses user input and executes corresponding commands.
+     *
+     * @param input Input by user
      */
     public String parse(String input) {
 
@@ -27,6 +29,9 @@ public class Parser {
 
         try {
             switch (words[0]) {
+            case "bye":
+                return "Byebye -w-";
+
             case "list":
                 return chatowo.listTasks();
 
@@ -57,6 +62,8 @@ public class Parser {
         } catch (Exception e) {
             if (e instanceof DateTimeParseException) {
                 return chatowo.dateTimeError();
+            } else if (e instanceof IndexOutOfBoundsException) {
+                return "Oopsies... Pwease specify a valid task number! >w<";
             } else {
                 return e.getMessage();
             }
@@ -93,6 +100,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Deletes specified task from task list.
+     *
+     * @param words Array of input words
+     * @throws ChatowoException if task number is missing
+     */
     public String delete(String[] words) throws ChatowoException {
         if (words.length <= 1) {
             throw new ChatowoException("Oopsies... Pwease specify a task number... >w<");
@@ -137,6 +150,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Adds a new event task to the task list.
+     *
+     * @param words Array of input words containing task details
+     * @param input Original input string
+     * @throws Exception if task format is invalid
+     */
     public String addEventTask(String[] words, String input) throws Exception {
         int fromIndex = input.lastIndexOf(" /from ");
         int toIndex = input.lastIndexOf(" /to ");
@@ -154,6 +174,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Finds tasks containing specified phrase within task list.
+     *
+     * @param words Array of input words containing search details
+     * @param input Original input string
+     * @throws ChatowoException if task format is invalid
+     */
     public String findTask(String[] words, String input) throws ChatowoException {
         if (words.length <= 1) {
             throw new ChatowoException("Oopsies... Say what you want to find pwease... >w<");
