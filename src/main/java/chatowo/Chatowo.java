@@ -87,6 +87,7 @@ public class Chatowo {
     public String delete(int index) {
         Task t = list.remove(index);
         list.trimToSize();
+
         try {
             storage.removeFromTaskList(index);
             return "Okie! This task has been deleted! ^w^\n  " + t;
@@ -101,13 +102,7 @@ public class Chatowo {
      * @param phrase Phrase to find in task
      */
     public String find(String phrase) {
-        TaskList matchingTasks = new TaskList();
-        list.forEach((task) -> {
-            if (task.getName().contains(phrase)) {
-                matchingTasks.add(task);
-            }
-        });
-        return "Here are the matching tasks! >w<" + matchingTasks;
+        return "Here are the matching tasks! >w<" + list.find(phrase);
     }
 
     /**
