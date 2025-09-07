@@ -13,6 +13,10 @@ import chatowo.task.Task;
 import chatowo.task.TaskList;
 import chatowo.task.ToDo;
 
+/**
+ * Main class that handles storage file data.
+ * Handles reading and writing operations into storage file.
+ */
 public class Storage {
     private String path;
 
@@ -20,6 +24,11 @@ public class Storage {
         this.path = path;
     }
 
+    /**
+     * Reads storage file if exists and creates corresponding tasks.
+     *
+     * @throws IOException if data is invalid
+     */
     public TaskList readTaskList() throws IOException {
         TaskList tasks = new TaskList();
 
@@ -31,6 +40,8 @@ public class Storage {
         if (!file.exists()) {
             file.createNewFile();
         }
+
+        assert directory.exists() && file.exists();
 
         BufferedReader br = new BufferedReader(new FileReader(path));
         String line = br.readLine();
@@ -132,6 +143,11 @@ public class Storage {
         processFile((line, lineIndex) -> lineIndex == index ? task.toDataString() : line);
     }
 
+    /**
+     * Adds task data string into storage file.
+     *
+     * @throws IOException if failed to add
+     */
     public void addTask(Task task) throws IOException {
         BufferedWriter bw;
         bw = new BufferedWriter(new FileWriter(path, true));

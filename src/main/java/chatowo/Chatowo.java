@@ -36,6 +36,7 @@ public class Chatowo {
         try {
             list.add(task);
             storage.addTask(task);
+            assert list.contains(task);
             return "Added " + task + " to task list! UwU\n"
                     + "You have " + list.size() + " tasks now!!";
         } catch (Exception e) {
@@ -51,6 +52,7 @@ public class Chatowo {
     public String mark(int index) {
         Task t = list.get(index);
         list.done(index);
+        assert t.isDone();
 
         try {
             storage.editTaskList(index, t);
@@ -69,6 +71,7 @@ public class Chatowo {
     public String unmark(int index) {
         Task t = list.get(index);
         list.undone(index);
+        assert !t.isDone();
 
         try {
             storage.editTaskList(index, t);

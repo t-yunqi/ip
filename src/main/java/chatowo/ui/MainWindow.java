@@ -48,18 +48,18 @@ public class MainWindow extends AnchorPane {
      * the dialog container. Clears the user input after processing.
      */
     @FXML
-    private void handleUserInput() throws InterruptedException {
+    private void handleUserInput() {
         String input = userInput.getText();
         String response = chatowo.getResponse(input);
-
-        if (input.equals("bye")) {
-            Platform.exit();
-        }
 
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getChatowoDialog(response, chatowoImage)
         );
         userInput.clear();
+
+        if (input.equals("bye")) {
+            Platform.exit();
+        }
     }
 }
