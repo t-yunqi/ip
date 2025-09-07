@@ -17,7 +17,7 @@ public class ParserTest {
             parser.addTodoTask(new String[]{"todo"}, "todo");
             fail(); // the test should not reach this line
         } catch (Exception e) {
-            assertEquals("    Oopsies... Add a name for your todo task pwease... >w<", e.getMessage());
+            assertEquals("Oopsies... Add a name for your todo task pwease... >w<", e.getMessage());
         }
     }
 
@@ -27,7 +27,7 @@ public class ParserTest {
             parser.addDeadlineTask(new String[]{"deadline", "/by", "2025-08-29"}, "deadline /by 2025-08-29");
             fail(); // the test should not reach this line
         } catch (Exception e) {
-            assertEquals("    Oopsies... Add a name for your deadline task pwease... >w<", e.getMessage());
+            assertEquals("Oopsies... Add a name for your deadline task pwease... >w<", e.getMessage());
         }
     }
 
