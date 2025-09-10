@@ -32,6 +32,9 @@ public class Parser {
             case "bye":
                 return "Byebye -w-";
 
+            case "undo":
+                return chatowo.undo();
+
             case "list":
                 return chatowo.listTasks();
 
