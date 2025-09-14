@@ -6,9 +6,18 @@ import org.junit.jupiter.api.Test;
 
 public class ToDoTest {
     @Test
-    public void toDataString() {
-        Task t = new ToDo("2103 ip");
-        t.setDone();
-        assertEquals("T | 1 | 2103 ip", t.toDataString());
+    public void toDataString_returnsCorrectFormat() {
+        ToDo todo = new ToDo("read book");
+        assertEquals("T | 0 | read book", todo.toDataString());
+        todo.setDone();
+        assertEquals("T | 1 | read book", todo.toDataString());
+    }
+
+    @Test
+    public void toString_returnsCorrectFormat() {
+        ToDo todo = new ToDo("read book");
+        assertEquals("[T][ ] read book", todo.toString());
+        todo.setDone();
+        assertEquals("[T][X] read book", todo.toString());
     }
 }

@@ -6,7 +6,7 @@ package chatowo.task;
  */
 public abstract class Task {
     private String name;
-    private boolean done = false;
+    private boolean isDone = false;
 
     public Task(String name) {
         this.name = name;
@@ -17,21 +17,21 @@ public abstract class Task {
     }
 
     public boolean isDone() {
-        return this.done;
+        return this.isDone;
     }
 
     /**
      * Updates the isDone status to true.
      */
     public void setDone() {
-        this.done = true;
+        this.isDone = true;
     }
 
     /**
      * Updates the isDone status to false.
      */
     public void setNotDone() {
-        this.done = false;
+        this.isDone = false;
     }
 
     /**
@@ -40,7 +40,7 @@ public abstract class Task {
      * @return String representation for data storage
      */
     public String toDataString() {
-        if (this.done) {
+        if (this.isDone) {
             return " | 1 | " + name;
         } else {
             return " | 0 | " + name;
@@ -54,7 +54,7 @@ public abstract class Task {
      */
     @Override
     public String toString() {
-        if (this.done) {
+        if (this.isDone) {
             return "[X] " + name;
         } else {
             return "[ ] " + name;
