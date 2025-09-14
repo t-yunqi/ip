@@ -130,7 +130,7 @@ public class Chatowo {
     }
 
     /**
-     * Undo the command that was last executed.
+     * Undoes the command that was last executed.
      */
     public String undo() {
         if (this.prevCommand == null) {
