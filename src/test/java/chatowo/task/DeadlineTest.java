@@ -17,8 +17,8 @@ public class DeadlineTest {
     @Test
     public void toString_returnsCorrectFormat() {
         Deadline deadline = new Deadline("homework", "2024-01-01");
-        assertEquals("[D][ ] homework (by: Jan 1 2024)", deadline.toString());
+        assertEquals("[D][ ] homework\n(by: Jan 1 2024)", deadline.toString());
         deadline.setDone();
-        assertEquals("[D][X] homework (by: Jan 1 2024)", deadline.toString());
+        assertEquals("[D][X] homework\n(by: Jan 1 2024)", deadline.toString());
     }
 }
